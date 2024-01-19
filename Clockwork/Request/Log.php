@@ -90,7 +90,10 @@ class Log
 		return $this->messages;
 	}
 
-	// Format message context, removes exception and trace if we are serializing them
+	/**
+	 * Format message context, removes exception and trace if we are serializing them
+	 * @param array $context
+	 */
 	protected function formatContext($context)
 	{
 		if ($this->hasException($context)) unset($context['exception']);
@@ -99,7 +102,11 @@ class Log
 		return (new Serializer)->normalize($context);
 	}
 
-	// Format exception if present in the context
+	/**
+	 * Format exception if present in the context
+	 * @param array $context
+	 * @return bool
+	 */
 	protected function formatException($context)
 	{
 		if ($this->hasException($context)) {
@@ -107,13 +114,21 @@ class Log
 		}
 	}
 
-	// Check if context has serializable trace
+	/**
+	 * Check if context has serializable trace
+	 * @param array $context
+	 * @return bool
+	 */
 	protected function hasTrace($context)
 	{
 		return ! empty($context['trace']) && $context['trace'] instanceof StackTrace && empty($context['raw']);
 	}
 
-	// Check if context has serializable exception
+	/**
+	 * Check if context has serializable exception
+	 * @param array $context
+	 * @return bool
+	 */
 	protected function hasException($context)
 	{
 		return ! empty($context['exception'])
