@@ -173,7 +173,7 @@ class Clockwork
 
 	/**
 	 * Get or set the current request instance
-	 * @return self
+	 * @return self|Request
 	 */
 	public function request(?Request $request = null)
 	{
