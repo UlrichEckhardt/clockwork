@@ -1,9 +1,14 @@
-<?php namespace Clockwork;
+<?php
+
+declare(strict_types=1);
+
+namespace Clockwork;
 
 use Clockwork\Authentication\{AuthenticatorInterface, NullAuthenticator};
 use Clockwork\DataSource\DataSourceInterface;
 use Clockwork\Helpers\Serializer;
 use Clockwork\Request\{Request, RequestType, ShouldCollect, ShouldRecord};
+use Clockwork\Request\Timeline\Timeline;
 use Clockwork\Storage\StorageInterface;
 use Closure;
 
@@ -14,21 +19,27 @@ class Clockwork
 	const VERSION = '5.3.4';
 
 	// Array of data sources, these objects collect metadata for the current application run
+	/** @var DataSourceInterface[] */
 	protected $dataSources = [];
 
 	// Request object, data structure which stores metadata about the current application run
+	/** @var Request */
 	protected $request;
 
 	// Storage object, provides implementation for storing and retrieving request objects
+	/** @var StorageInterface */
 	protected $storage;
 
 	// Authenticator implementation, authenticates requests for clockwork metadata
+	/** @var AuthenticatorInterface */
 	protected $authenticator;
 
 	// An object specifying the rules for collecting requests
+	/** @var ShouldCollect */
 	protected $shouldCollect;
 
 	// An object specifying the rules for recording requests
+	/** @var ShouldRecord */
 	protected $shouldRecord;
 
 	// Create a new Clockwork instance with default request object, a storage implementation has to be additionally set
@@ -41,14 +52,20 @@ class Clockwork
 		$this->shouldRecord = new ShouldRecord;
 	}
 
-	// Add a new data source
+	/**
+	 * Add a new data source
+	 * @return self
+	 */
 	public function addDataSource(DataSourceInterface $dataSource)
 	{
 		$this->dataSources[] = $dataSource;
 		return $this;
 	}
 
-	// Resolve the current request, sending it through all data sources, finalizing log and timeline
+	/**
+	 * Resolve the current request, sending it through all data sources, finalizing log and timeline
+	 * @return self
+	 */
 	public function resolveRequest()
 	{
 		foreach ($this->dataSources as $dataSource) {
@@ -61,7 +78,10 @@ class Clockwork
 		return $this;
 	}
 
-	// Resolve the current request as a "command" type request with command-specific data
+	/**
+	 * Resolve the current request as a "command" type request with command-specific data
+	 * @return self
+	 */
 	public function resolveAsCommand($name, $exitCode = null, $arguments = [], $options = [], $argumentsDefaults = [], $optionsDefaults = [], $output = null)
 	{
 		$this->resolveRequest();
@@ -78,7 +98,10 @@ class Clockwork
 		return $this;
 	}
 
-	// Resolve the current request as a "queue-job" type request with queue-job-specific data
+	/**
+	 * Resolve the current request as a "queue-job" type request with queue-job-specific data
+	 * @return self
+	 */
 	public function resolveAsQueueJob($name, $description = null, $status = 'processed', $payload = [], $queue = null, $connection = null, $options = [])
 	{
 		$this->resolveRequest();
@@ -95,8 +118,11 @@ class Clockwork
 		return $this;
 	}
 
-	// Resolve the current request as a "test" type request with test-specific data, accepts test name, status, status
-	// message in case of failure and array of ran asserts
+	/**
+	 * Resolve the current request as a "test" type request with test-specific data, accepts test name, status, status
+	 * message in case of failure and array of ran asserts
+	 * @return self
+	 */
 	public function resolveAsTest($name, $status = 'passed', $statusMessage = null, $asserts = [])
 	{
 		$this->resolveRequest();
@@ -113,7 +139,10 @@ class Clockwork
 		return $this;
 	}
 
-	// Extends the request with an additional data form all data sources, which is not required for normal use
+	/**
+	 * Extends the request with an additional data form all data sources, which is not required for normal use
+	 * @return self
+	 */
 	public function extendRequest(?Request $request = null)
 	{
 		foreach ($this->dataSources as $dataSource) {
@@ -129,7 +158,10 @@ class Clockwork
 		return $this->storage->store($this->request);
 	}
 
-	// Reset all data sources to an empty state, clearing any collected data
+	/**
+	 * Reset all data sources to an empty state, clearing any collected data
+	 * @return self
+	 */
 	public function reset()
 	{
 		foreach ($this->dataSources as $dataSource) {
@@ -139,7 +171,10 @@ class Clockwork
 		return $this;
 	}
 
-	// Get or set the current request instance
+	/**
+	 * Get or set the current request instance
+	 * @return self
+	 */
 	public function request(?Request $request = null)
 	{
 		if (! $request) return $this->request;
@@ -158,7 +193,10 @@ class Clockwork
 		return $this->request->log();
 	}
 
-	// Get the timeline instance for the current request
+	/**
+	 * Get the timeline instance for the current request
+	 * @return Timeline
+	 */
 	public function timeline()
 	{
 		return $this->request->timeline();
@@ -192,7 +230,10 @@ class Clockwork
 		return $this->shouldRecord;
 	}
 
-	// Get or set all data sources at once
+	/**
+	 * Get or set all data sources at once
+	 * @return self|DataSourceInterface[]
+	 */
 	public function dataSources($dataSources = null)
 	{
 		if (! $dataSources) return $this->dataSources;
@@ -201,7 +242,10 @@ class Clockwork
 		return $this;
 	}
 
-	// Get or set a storage implementation
+	/**
+	 * Get or set a storage implementation
+	 * @return self|StorageInterface
+	 */
 	public function storage(?StorageInterface $storage = null)
 	{
 		if (! $storage) return $this->storage;
@@ -210,7 +254,10 @@ class Clockwork
 		return $this;
 	}
 
-	// Get or set an authenticator implementation
+	/**
+	 * Get or set an authenticator implementation
+	 * @return self|AuthenticatorInterface
+	 */
 	public function authenticator(?AuthenticatorInterface $authenticator = null)
 	{
 		if (! $authenticator) return $this->authenticator;
