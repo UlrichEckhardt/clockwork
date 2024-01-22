@@ -137,6 +137,24 @@ clock()->event('Updating cache', [ 'color' => 'green' ])->run(function () {
 
 Read more about available features on the [Clockwork website](https://underground.works/clockwork).
 
+## Hacking
+
+### PHPStan Static Analyzer Integration
+
+All code is checked for common flaws using [PHPStan](https://phpstan.org),
+a static code analyzer. This is automatically executed in a GitHub action
+defined in [phpstan.yaml](.github/workflows/phpstan.yaml). The results are
+automatically uploaded to [GitHub QL](https://codeql.github.com) to make
+them available in pull requests.
+
+#### Running PHPStan Locally
+
+You can execute PHPStan using `vendor/bin/phpstan analyze`, but this will
+turn up a bunch of existing and known flaws, much more than in a PR in
+GitHub, so this is of limited use. Also, the exact output depends on the
+version of PHP, installed extensions and other packages you may have
+installed locally.
+
 <p align="center">
 	<a href="https://underground.works">
 		<img width="150px" src="https://github.com/itsgoingd/clockwork/raw/master/.github/assets/footer.png">
