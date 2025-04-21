@@ -1,5 +1,7 @@
 name: PHPStan Static Analyzer
-on: [push]
+on:
+  - push
+  - pull_request
 jobs:
   run-phpstan:
     name: Run PHPStan
