@@ -21,3 +21,11 @@ parameters:
 		- Clockwork/Support
 	paths:
 		- Clockwork
+
+services:
+	errorFormatter.sarif:
+		class: PHPStanSarifErrorFormatter\SarifErrorFormatter
+		arguments:
+			relativePathHelper: @simpleRelativePathHelper
+			currentWorkingDirectory: %currentWorkingDirectory%
+			pretty: true
