@@ -486,10 +486,7 @@ class Clockwork
 		}
 	}
 
-	/**
-	 * Creates and caches an incoming request instance
-	 * @return IncomingRequest
-	 */
+	// Creates and caches an incoming request instance
 	protected function incomingRequest()
 	{
 		if ($this->incomingRequest) return $this->incomingRequest;
