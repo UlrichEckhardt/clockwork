@@ -13,8 +13,10 @@ jobs:
   run-phpstan:
     name: Run PHPStan
     runs-on: ubuntu-latest
+    permissions:
+      # for github/codeql-action/upload-sarif to upload SARIF results
+      security-events: write
     steps:
-
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
