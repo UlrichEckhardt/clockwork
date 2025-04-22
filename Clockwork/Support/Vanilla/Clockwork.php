@@ -266,6 +266,11 @@ class Clockwork
 		return $this->response([ 'token' => $token ], $token ? 200 : 403);
 	}
 
+	public function demo(): Clockwork
+	{
+		return null;
+	}
+
 	// Returns the Clockwork Web UI as a HTTP response, installs the Web UI on the first run
 	public function returnWeb()
 	{
@@ -486,10 +491,7 @@ class Clockwork
 		}
 	}
 
-	/**
-	 * Creates and caches an incoming request instance
-	 * @return IncomingRequest
-	 */
+	// Creates and caches an incoming request instance
 	protected function incomingRequest()
 	{
 		if ($this->incomingRequest) return $this->incomingRequest;
