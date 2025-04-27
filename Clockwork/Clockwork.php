@@ -48,6 +48,11 @@ class Clockwork
 		return $this;
 	}
 
+	public function demo(): Clockwork
+	{
+		return null;
+	}
+
 	// Resolve the current request, sending it through all data sources, finalizing log and timeline
 	public function resolveRequest()
 	{
